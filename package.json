@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/cvinson/searchkit-restify/issues"
   },
-  "homepage": "https://github.com/cvinson/searchkit-restify#readme"
+  "homepage": "https://github.com/cvinson/searchkit-restify#readme",
+  "devDependencies": {
+    "tape": "^4.6.2"
+  }
 }
