@@ -1,0 +1,23 @@
+{
+  "name": "searchkit-restify",
+  "version": "0.1.0",
+  "description": "Elasticsearch restify middleware modeled after searchkit-express",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cvinson/searchkit-restify.git"
+  },
+  "keywords": [
+    "searchkit",
+    "restify"
+  ],
+  "author": "Colin Vinson",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cvinson/searchkit-restify/issues"
+  },
+  "homepage": "https://github.com/cvinson/searchkit-restify#readme"
+}
