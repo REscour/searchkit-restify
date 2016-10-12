@@ -25,5 +25,10 @@
   },
   "peerDependencies": {
     "restify": "^4.0.0"
+  },
+  "dependencies": {
+    "debug": "^2.2.0",
+    "lodash": "^4.16.4",
+    "request": "^2.75.0"
   }
 }
