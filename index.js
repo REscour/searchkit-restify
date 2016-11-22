@@ -11,8 +11,8 @@ module.exports = (config, server) => {
     }
   });
 
-  const elasticRequest = (url, body) => {
-    const fullUrl = `${config.host}/${config.index}${url}`;
+  const elasticRequest = (url, indices, body) => {
+    const fullUrl = `${config.host}/${indices}${url}`;
 
     return requestClient.post({
       url: fullUrl,
@@ -24,6 +24,7 @@ module.exports = (config, server) => {
 
   server.post('/_search', (req, res) => {
     const queryBody = config.queryProcessor(req.body || {}, req, res);
-    elasticRequest('/_search', queryBody).pipe(res);
+    const indices = (config.indicesProcessor || (() => config.index))(req);
+    elasticRequest('/_search', indices, queryBody).pipe(res);
   });
 }
