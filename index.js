@@ -1,9 +1,9 @@
-var _ = require('lodash');
-var restify = require('restify');
+var identity = require('lodash/identity');
+var isObject = require('lodash/isObject');
 var request = require('request');
 
 module.exports = function(config, server) {
-  config.queryProcessor = config.queryProcessor || _.identity
+  config.queryProcessor = config.queryProcessor || identity;
 
   var requestClient = request.defaults({
     pool: {
@@ -12,12 +12,12 @@ module.exports = function(config, server) {
   });
 
   var elasticRequest = function(url, body) {
-    var fullUrl = config.host+ "/" + config.index + url;
+    var fullUrl = config.host + "/" + config.index + url;
 
     return requestClient.post({
       url: fullUrl,
       body: body,
-      json: _.isObject(body),
+      json: isObject(body),
       forever: true
     });
   }

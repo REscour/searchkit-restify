@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/cvinson/searchkit-restify#readme",
   "devDependencies": {
+    "restify": "^4.3.0",
     "tape": "^4.6.2"
   },
   "peerDependencies": {
