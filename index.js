@@ -1,18 +1,18 @@
-var identity = require('lodash/identity');
-var isObject = require('lodash/isObject');
-var request = require('request');
+const identity = require('lodash/identity');
+const isObject = require('lodash/isObject');
+const request = require('request');
 
-module.exports = function(config, server) {
+module.exports = (config, server) => {
   config.queryProcessor = config.queryProcessor || identity;
 
-  var requestClient = request.defaults({
+  const requestClient = request.defaults({
     pool: {
       maxSockets: config.maxSockets || 1000
     }
   });
 
-  var elasticRequest = function(url, body) {
-    var fullUrl = config.host + "/" + config.index + url;
+  const elasticRequest = (url, body) => {
+    const fullUrl = `${config.host}/${config.index}${url}`;
 
     return requestClient.post({
       url: fullUrl,
@@ -22,8 +22,8 @@ module.exports = function(config, server) {
     });
   }
 
-  server.post('/_search', function(req, res) {
-    var queryBody = config.queryProcessor(req.body || {}, req, res);
+  server.post('/_search', (req, res) => {
+    const queryBody = config.queryProcessor(req.body || {}, req, res);
     elasticRequest('/_search', queryBody).pipe(res);
   });
 }
