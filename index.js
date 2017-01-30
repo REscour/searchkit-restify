@@ -5,6 +5,9 @@ const request = require('request');
 module.exports = (config, server) => {
   config.queryProcessor = config.queryProcessor || identity;
 
+  let middleware = (req, res, next) => next(req, res);
+  if (config.middleware) middleware = config.middleware
+
   const requestClient = request.defaults({
     pool: {
       maxSockets: config.maxSockets || 1000
@@ -22,7 +25,9 @@ module.exports = (config, server) => {
     });
   }
 
-  server.post('/_search', (req, res) => {
+  server.post({ path: '/_search' },
+  middleware,
+  (req, res) => {
     const queryBody = config.queryProcessor(req.body || {}, req, res);
     const indices = (config.indicesProcessor || (() => config.index))(req);
     elasticRequest('/_search', indices, queryBody).pipe(res);
