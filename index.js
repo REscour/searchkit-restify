@@ -29,7 +29,7 @@ module.exports = (config, server) => {
   middleware,
   (req, res) => {
     const queryBody = config.queryProcessor(req.body || {}, req, res);
-    const indices = (config.indicesProcessor || (() => config.index))(req);
+    const indices = (config.indicesProcessor || (() => config.index))(req, res);
     elasticRequest('/_search', indices, queryBody).pipe(res);
   });
 }
