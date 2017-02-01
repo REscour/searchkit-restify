@@ -30,6 +30,7 @@ module.exports = (config, server) => {
   (req, res) => {
     const queryBody = config.queryProcessor(req.body || {}, req, res);
     const indices = (config.indicesProcessor || (() => config.index))(req, res);
+    if (res.statusCode !== 200) return res;
     elasticRequest('/_search', indices, queryBody).pipe(res);
   });
 }
