@@ -4,6 +4,7 @@ const request = require('request');
 
 module.exports = (config, server) => {
   config.queryProcessor = config.queryProcessor || identity;
+  config.responseBodyProcessor = config.responseBodyProcessor || ((req, res, body) => body);
 
   let middleware = (req, res, next) => next(req, res);
   if (config.middleware) middleware = config.middleware
@@ -14,7 +15,7 @@ module.exports = (config, server) => {
     }
   });
 
-  const elasticRequest = (url, indices, body) => {
+  const elasticRequest = (url, indices, body, cb) => {
     const fullUrl = `${config.host}/${indices}${url}`;
 
     return requestClient.post({
@@ -22,7 +23,7 @@ module.exports = (config, server) => {
       body: body,
       json: isObject(body),
       forever: true
-    });
+    }, cb);
   }
 
   server.post({ path: '/_search' },
@@ -31,6 +32,10 @@ module.exports = (config, server) => {
     const queryBody = config.queryProcessor(req.body || {}, req, res);
     const indices = (config.indicesProcessor || (() => config.index))(req, res);
     if (res.statusCode !== 200) return res;
-    elasticRequest('/_search', indices, queryBody).pipe(res);
+    elasticRequest('/_search', indices, queryBody, (error, response, body) => {
+      if (error) return res.status(response.statusCode).send(error);
+      if (config.responseBodyProcessor) body = config.responseBodyProcessor(req, res, body);
+      res.send(body);
+    });
   });
 }

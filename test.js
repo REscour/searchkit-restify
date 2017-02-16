@@ -1,4 +1,3 @@
-const filter = require('lodash/filter');
 const restify = require('restify');
 const test = require('tape');
 const SearchkitRestify = require('./');
