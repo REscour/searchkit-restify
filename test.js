@@ -1,10 +1,10 @@
 const restify = require('restify');
 const test = require('tape');
-const SearchkitRestify = require('./');
+const searchkitRestify = require('./');
 
 test('adds endpoint to routes', (assert) => {
   const server = restify.createServer();
-  SearchkitRestify({ index: 'anIndex' }, server);
+  searchkitRestify({ index: 'anIndex' }, server);
 
   const searchRoute = server.router.routes.POST.filter((route) => route.spec.path === '/_search');
 
