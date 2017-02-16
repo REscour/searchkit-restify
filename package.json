@@ -1,6 +1,6 @@
 {
   "name": "searchkit-restify",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "description": "Elasticsearch restify middleware modeled after searchkit-express",
   "main": "index.js",
   "scripts": {
