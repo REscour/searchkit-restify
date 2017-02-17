@@ -4,9 +4,10 @@ const request = require('request');
 
 module.exports = (config, server) => {
   config.queryProcessor = config.queryProcessor || identity;
+  config.responseBodyProcessor = config.responseBodyProcessor || ((req, res, body) => body);
 
   let middleware = (req, res, next) => next(req, res);
-  if (config.middleware) middleware = config.middleware
+  if (config.middleware) middleware = config.middleware;
 
   const requestClient = request.defaults({
     pool: {
@@ -14,16 +15,16 @@ module.exports = (config, server) => {
     }
   });
 
-  const elasticRequest = (url, indices, body) => {
-    const fullUrl = `${config.host}/${indices}${url}`;
+  const elasticRequest = (endpoint, indices, body, cb) => {
+    const url = `${config.host}/${indices}${endpoint}`;
 
     return requestClient.post({
-      url: fullUrl,
-      body: body,
       json: isObject(body),
-      forever: true
-    });
-  }
+      forever: true,
+      body,
+      url
+    }, cb);
+  };
 
   server.post({ path: '/_search' },
   middleware,
@@ -31,6 +32,10 @@ module.exports = (config, server) => {
     const queryBody = config.queryProcessor(req.body || {}, req, res);
     const indices = (config.indicesProcessor || (() => config.index))(req, res);
     if (res.statusCode !== 200) return res;
-    elasticRequest('/_search', indices, queryBody).pipe(res);
+    elasticRequest('/_search', indices, queryBody, (error, response, body) => {
+      if (error) return res.status(response.statusCode).send(error);
+      if (config.responseBodyProcessor) body = config.responseBodyProcessor(req, res, body);
+      res.send(body);
+    });
   });
-}
+};
