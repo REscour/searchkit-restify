@@ -8,18 +8,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cvinson/searchkit-restify.git"
+    "url": "git+https://github.com/REscour/searchkit-restify.git"
   },
   "keywords": [
     "searchkit",
     "restify"
   ],
-  "author": "Colin Vinson",
+  "author": "REscour, Inc.",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/cvinson/searchkit-restify/issues"
+    "url": "https://github.com/REscour/searchkit-restify/issues"
   },
-  "homepage": "https://github.com/cvinson/searchkit-restify#readme",
+  "homepage": "https://github.com/REscour/searchkit-restify#readme",
   "devDependencies": {
     "restify": "^4.3.0",
     "tape": "^4.6.2"
