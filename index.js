@@ -27,15 +27,15 @@ module.exports = (config, server) => {
   };
 
   server.post({ path: '/_search' },
-  middleware,
-  (req, res) => {
-    const queryBody = config.queryProcessor(req.body || {}, req, res);
-    const indices = (config.indicesProcessor || (() => config.index))(req, res);
-    if (res.statusCode !== 200) return res;
-    elasticRequest('/_search', indices, queryBody, (error, response, body) => {
-      if (error) return res.status(response.statusCode).send(error);
-      if (config.responseBodyProcessor) body = config.responseBodyProcessor(req, res, body);
-      res.send(body);
+    middleware,
+    (req, res) => {
+      const queryBody = config.queryProcessor(req.body || {}, req, res);
+      const indices = (config.indicesProcessor || (() => config.index))(req, res);
+      if (res.statusCode !== 200) return res;
+      elasticRequest('/_search', indices, queryBody, (error, response, body) => {
+        if (error) return res.status(response.statusCode).send(error);
+        if (config.responseBodyProcessor) body = config.responseBodyProcessor(req, res, body);
+        res.send(body);
+      });
     });
-  });
 };
